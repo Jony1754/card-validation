@@ -13,6 +13,84 @@ html {
     scroll-behavior: smooth;
 }
 
+.card {
+    width: 420px;
+    height: 150px;
+    position: absolute;
+    top: 20%;
+    left: 15%;
+    display: grid;
+    flex-direction: column;
+
+    &-data {
+        display: flex;
+
+        p {
+            font-size: 1rem;
+            color: $dark-grayish-violet;
+            // color: red;
+
+        }
+    }
+
+
+    .filledblob {
+        position: absolute;
+        top: 10px;
+        z-index: 1;
+        left: 20px;
+        border-radius: 100%;
+        width: 40px;
+        height: 40px;
+        background-color: white;
+    }
+
+    .outlinedblob {
+        position: absolute;
+        top: 20px;
+        left: 70px;
+        z-index: 1;
+        border-radius: 100%;
+        border: 1px solid white;
+        width: 20px;
+        height: 20px;
+        background-color: transparent;
+    }
+
+    img {
+        position: absolute;
+        z-index: 0;
+        width: 100%;
+    }
+
+    p {
+        position: relative;
+        z-index: 1;
+        bottom: -60px;
+        display: block;
+        text-align: center;
+        width: 100%;
+        text-shadow: #6a676c;
+        font-weight: bold;
+        // font-size: 1.5rem;
+    }
+
+    .card-number {
+        font-size: 1.5rem;
+        color: $light-grayish-violet;
+
+    }
+}
+
+.verify {
+    font-size: 1.4rem;
+    text-align: right;
+    font-weight: extra-bold;
+    margin-right: 20px;
+    color: $very-dark-violet;
+    margin-bottom: 20px;
+}
+
 .card-container {
     display: flex;
     flex-wrap: wrap;
@@ -24,13 +102,17 @@ html {
         width: 50%;
         height: 100%;
         border-radius: 10px;
-        padding: 20px;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
+        align-items: flex-start;
+
         // margin-right: 20px;
         // margin-bottom: 20px;
+        &__background {
+            height: 100%;
+            width: 80%;
+        }
     }
 
     .card-right {
@@ -38,6 +120,8 @@ html {
         border-radius: 10px;
         padding: 20px;
         height: 100%;
+        display: grid;
+        place-items: center;
 
         form {
             width: 320px;
@@ -45,7 +129,7 @@ html {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100%;
+            height: fit-content;
 
             label {
                 font-size: 1rem;

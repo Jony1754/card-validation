@@ -1,15 +1,18 @@
 import React from 'react';
 import bgimg from '../assets/images/bg-main-desktop.png';
+import Card from '../components/Card';
+import front from '../assets/images/bg-card-front.png';
 const CardValidation = () => {
   return (
     <>
       <div className='card-container'>
         <section className='card-left'>
-          <img src={bgimg} alt='' />
+          <img src={bgimg} alt='' className='card-left__background' />
+          <Card image={front} num={'XXXX  XXXX  XXXX  XXXX'} />
         </section>
         <section className='card-right'>
-          <h3>VERIFY YOUR PAYMENT INFO</h3>
           <form action=''>
+            <h1 className='verify'>Verify your payment info</h1>
             <div className='form-group'>
               <label htmlFor='cardNumber'>Card Number</label>
               <input
