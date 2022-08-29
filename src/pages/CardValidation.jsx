@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { formats, numberValidation } from '../utils/cardFormater';
 import bgimg from '../assets/images/bg-main-desktop.png';
 import Card from '../components/Card';
 import front from '../assets/images/bg-card-front.png';
 const CardValidation = () => {
+  const cardRef = useRef(0);
+  const [card, setCard] = React.useState({});
+  const onChange = (e) => {
+    setCard({
+      ...card,
+      [e.target.name]: e.target.value,
+    });
+  };
+  console.log({ ...card });
   return (
     <>
       <div className='card-container'>
         <section className='card-left'>
           <img src={bgimg} alt='' className='card-left__background' />
-          <Card image={front} num={'XXXX  XXXX  XXXX  XXXX'} />
+          <Card image={front} num={card.cardNumber || 'XXXXXXXXXXXXXXXX'} />
         </section>
         <section className='card-right'>
           <form action=''>
@@ -16,19 +26,27 @@ const CardValidation = () => {
             <div className='form-group'>
               <label htmlFor='cardNumber'>Card Number</label>
               <input
-                type='number'
+                type='text'
                 className='form-control'
                 id='cardNumber'
                 placeholder='Card Number'
+                name='cardNumber'
+                ref={cardRef}
+                onChange={onChange}
+                onKeyPress={(e) => {
+                  console.log('e on key press: ', e);
+                  formats(e.target, e);
+                }}
+                onKeyUp={(e) => numberValidation(e)}
               />
             </div>
             <div className='form-group'>
               <label htmlFor='cardHolderName'>Card Holder Name</label>
               <input
-                type='number'
+                type='text'
                 className='form-control'
                 id='cardHolderName'
-                placeholder='Card Holder Name'
+                placeholder='Your name here'
               />
             </div>
             <label htmlFor='expiryDate'>EXPIRY DATE</label>
@@ -39,7 +57,7 @@ const CardValidation = () => {
                   type='number'
                   className='form-control'
                   id='expiryDate'
-                  placeholder='MM'
+                  placeholder='02'
                 />
               </div>
               <div className='date-group'>
@@ -48,7 +66,7 @@ const CardValidation = () => {
                   type='number'
                   className='form-control'
                   id='expiryDate'
-                  placeholder='YY'
+                  placeholder='2027'
                 />
               </div>
             </div>
@@ -58,7 +76,7 @@ const CardValidation = () => {
                 type='text'
                 className='form-control'
                 id='cvv'
-                placeholder='CVV'
+                placeholder='262'
               />
             </div>
             <button type='submit' className='btn btn-primary'>
