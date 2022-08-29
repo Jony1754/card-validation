@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/card-validation/static/css/main.83607b38.css",
+    "main.js": "/card-validation/static/js/main.07337ae5.js",
+    "static/media/bg-main-desktop.png": "/card-validation/static/media/bg-main-desktop.806e7aa7b4dbc1d78bc3.png",
+    "static/media/bg-card-front.png": "/card-validation/static/media/bg-card-front.8153e2ca184402a8385f.png",
+    "index.html": "/card-validation/index.html",
+    "main.83607b38.css.map": "/card-validation/static/css/main.83607b38.css.map",
+    "main.07337ae5.js.map": "/card-validation/static/js/main.07337ae5.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.83607b38.css",
+    "static/js/main.07337ae5.js"
+  ]
+}
