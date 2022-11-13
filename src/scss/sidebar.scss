@@ -1,0 +1,51 @@
+$sidebar-height: 250px;
+@mixin active-state{
+    background-color: #f6f8fa;
+                color: #24292e;
+                border-radius: 20px;
+                width: 100%;
+}
+.active{
+    @include active-state;
+}
+.sidebar{
+    background-color: #fff;
+    // border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 1px 12px rgba(27,31,35,.15);
+    // margin-bottom: 16px;
+    padding: 15px;
+    height: $sidebar-height;
+    min-width: 25%;
+    position: absolute;
+    top: calc(50% - #{$sidebar-height/2});
+    
+
+    &__list{
+        list-style: none;
+        margin: 0;
+        padding: 10px;
+
+        li{
+            padding-left: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            &:hover{
+              @include active-state;
+            }
+        }
+        svg{
+            color: #586069;
+            
+        }
+        a{
+            color: #586069;
+            display: block;
+            font-size: 14px;
+            padding: 8px;
+            text-decoration: none;
+          
+        }
+    }
+}
