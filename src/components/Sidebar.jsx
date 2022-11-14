@@ -11,45 +11,47 @@ const Sidebar = () => {
     <aside className='sidebar'>
       <ul className='sidebar__list'>
         <li>
-          <DvrIcon />
           <NavLink
             className={({ isActive }) => (isActive ? 'active' : undefined)}
             to={'/transactions'}
           >
-            Transaction history
+            <DvrIcon />
+            <p>Transaction history</p>
           </NavLink>
         </li>
 
         <li>
-          <ScheduleIcon />
           <NavLink
             className={({ isActive }) => (isActive ? 'active' : undefined)}
             to={'/scheduled'}
           >
-            Scheduled payments
+            <ScheduleIcon />
+            <p>Scheduled payments</p>
           </NavLink>
         </li>
         <li>
-          <SettingsSuggestIcon />
           <NavLink
             className={({ isActive }) => (isActive ? 'active' : undefined)}
             to={'settings'}
           >
-            User settings
+            <SettingsSuggestIcon />
+            <p>User settings</p>
           </NavLink>
         </li>
         <li>
-          <StyleIcon />
           <NavLink
             className={({ isActive }) => (isActive ? 'active' : undefined)}
           >
-            Your cards
+            <StyleIcon />
+            <p>Your cards</p>
           </NavLink>
         </li>
 
         <li>
-          <ExitToAppIcon />
-          <NavLink to={'/logout'}>Logout</NavLink>
+          <NavLink to={'/logout'}>
+            <ExitToAppIcon />
+            <p>Logout</p>
+          </NavLink>
         </li>
       </ul>
     </aside>
