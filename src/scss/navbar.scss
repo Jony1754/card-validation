@@ -1,4 +1,5 @@
 $white: #fff;
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -77,3 +78,8 @@ $white: #fff;
 }
 
 // Path: src/scss/main.scss
+
+body {
+  background-color: $white;
+  display: block;
+}

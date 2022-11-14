@@ -4,10 +4,34 @@ import { CircularProgress } from '@mui/material';
 import calvito from '../assets/calvito.jpg';
 import noman from '../assets/noman.png';
 import '../scss/login.scss';
-export const Login = () => {
+export const Login = ({ setIsLogged }) => {
   const [validUser, setValidUser] = React.useState('');
+  const [passcode, setPasscode] = React.useState('');
   const [error, setError] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+
+  const handleChange = (e) => {
+    setPasscode(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    console.log('validUser', validUser, 'pass', passcode);
+
+    setTimeout(() => {
+      if (validUser === 'ariasej' && passcode === '1234') {
+        console.log('validUser', validUser, 'pass', passcode);
+        setError(false);
+        setIsLogged(true);
+        setLoading(false);
+      } else {
+        setError(true);
+        setLoading(false);
+      }
+    }, 4000);
+  };
+
   return validUser.length > 0 ? (
     <div className='login__container transition'>
       <div className='login'>
@@ -15,9 +39,18 @@ export const Login = () => {
 
         <h3>Welcome back</h3>
         <h2>Jonathan Arias</h2>
-        <form action='' className='login-form'>
-          <input type='password' placeholder='Enter your passcode' />
-          <button type='submit'>LOGIN</button>
+        <form action='' className='login-form' onSubmit={handleSubmit}>
+          <input
+            type='password'
+            placeholder='Enter your passcode'
+            name='passcode'
+            onChange={handleChange}
+          />
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            <button type='submit'>Login</button>
+          )}
           <Link to='#'>Forgot your passcode?</Link>
         </form>
       </div>
