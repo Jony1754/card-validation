@@ -32,7 +32,7 @@ const Sidebar = () => {
         <li>
           <NavLink
             className={({ isActive }) => (isActive ? 'active' : undefined)}
-            to={'settings'}
+            to={'/profile'}
           >
             <SettingsSuggestIcon />
             <p>User settings</p>
@@ -40,6 +40,7 @@ const Sidebar = () => {
         </li>
         <li>
           <NavLink
+            to={'/cards'}
             className={({ isActive }) => (isActive ? 'active' : undefined)}
           >
             <StyleIcon />

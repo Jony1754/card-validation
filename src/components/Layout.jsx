@@ -1,9 +1,10 @@
-import Sidebar from '../components/Sidebar';
-import Navbar from '../components/Navbar';
+import React from 'react';
+import Navbar from './Navbar';
+import Sidebar from './Sidebar';
 import { Login } from '../pages/Login';
 import { useState, useEffect } from 'react';
-function App() {
-  const [isLogged, setIsLogged] = useState(true);
+const Layout = ({ children }) => {
+  const [isLogged, setIsLogged] = useState(false);
   useEffect(() => {
     if (isLogged) {
       document.body.classList.remove('body');
@@ -12,17 +13,19 @@ function App() {
 
   if (!isLogged) {
     return (
-      <div className='App'>
+      <>
         <Login setIsLogged={setIsLogged} />
-      </div>
+      </>
     );
+  } else {
   }
   return (
-    <div className='App'>
+    <>
       <Navbar />
       <Sidebar />
-    </div>
+      {children}
+    </>
   );
-}
+};
 
-export default App;
+export default Layout;
