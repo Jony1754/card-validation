@@ -18,7 +18,9 @@ app.use(session({
 
 // ROUTES
 const routeLog = require('./Rutas/Rutas_logs')
+const routetrans = require('./Rutas/Rutas_trans')
 app.use("/Login", routeLog)
+app.use("/Transacciones", routetrans)
 
 
 // open app port 3000
