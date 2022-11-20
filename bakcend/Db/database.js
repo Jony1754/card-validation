@@ -26,11 +26,12 @@ connection.connect(error => {
                     }else{
                         if(results.length==0){connection.query(sql2)}
                     }
+                    connection.end();
                 });
             }
+            connection.end();
         });
     }
-
     console.log("********** conectado a la base de datos ************")
 })
 

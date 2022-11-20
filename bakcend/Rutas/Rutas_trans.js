@@ -5,7 +5,7 @@ const router = express.Router()
 var connection = require("../Db/database.js")
 
 
-router.get('/History', async (req, res) => {
+/*router.get('/History', async (req, res) => {
     const usr = req.session.all
     const sql = "SELECT * FROM db_pagos.transacciones where Id_cuenta_entrega = ? or Id_cuenta_recibido = ?"
     try {
@@ -28,58 +28,7 @@ router.get('/History', async (req, res) => {
         res.status(404)
         return error
     }
-});
-
-/*router.post('/Transaccion', async(req,res) => {
-    
-    const usr = req.session.all
-
-    const usr1 = req.query.cuenta
-    const cant = req.query.cant
-    
-    const sql = "SELECT * FROM db_pagos.cuenta_bancaria where Id_cuenta = ?"
-    
-    const cuenta = connection.query(sql, [usr.Id_cuenta], function(err, results){    
-        if (err){
-            res.status(203)
-            throw err
-        }else{
-            const cuenta = results[0].Num_cuenta
-
-            if (cant <= results[0].Cantidad){
-                const result = results[0].Cantidad - cant
-
-                connection.query("SELECT * FROM db_pagos.cuenta_bancaria where Num_cuenta = ?", [usr1], function(err, results){
-
-                    if(results.length == 0 || !(usr1 === results[0].Num_cuenta )) {
-                        res.status(203)
-                        throw err
-                    }else{
-                        connection.query("UPDATE db_pagos.cuenta_bancaria SET Cantidad = ? WHERE Num_cuenta = ? and Id_cuenta > 0",[result, cuenta], function(err,results){
-                            console.log("update cuenta")
-                        })
-                        console.log(results[0].Id_cuenta)
-                        connection.query("INSERT INTO db_pagos.transacciones (Id_cuenta_entrega, Id_cuenta_recibido, Cantidad) values (?,?,?)", [usr.Id_cuenta,results[0].Id_cuenta,cant], function(err,results){
-                            console.log("add transaccion")
-
-                        })
-                        
-                        connection.query("UPDATE db_pagos.cuenta_bancaria SET Cantidad = ? WHERE Num_cuenta = ? and Id_cuenta > 0", [results[0].Cantidad + Number(cant), results[0].Num_cuenta ], function(err, results){
-                            console.log("Transaccion exitosa")
-                        })
-
-                    
-                        res.status(302)
-                        res.send(JSON.stringify("transaccion exitosa", null, 4))
-                    }
-                
-                })
-            }else{
-                res.status(402)
-            }
-        }
-    })
-})*/
+});*/
 
 router.post('/Transaccion', async(req,res) => {
     const usr = req.session.all
@@ -119,14 +68,17 @@ router.post('/Transaccion', async(req,res) => {
                                 
                                 connection.query("UPDATE db_pagos.cuenta_bancaria SET Cantidad = ? WHERE Id_tarjeta = ? and Id_cuenta > 0",[result, results[0].Id_tarjeta], function(err,results){
                                     console.log("update cuenta")
+                                    connection.end();
                                 })
                                 
                                 connection.query("INSERT INTO db_pagos.transacciones (Id_cuenta_entrega, Id_cuenta_recibido, Cantidad, Conpago) values (?,?,?,?)", [usr.Num_cuenta,ac,cant,conp], function(err,results){
                                     console.log("add transaccion")
+                                    connection.end();
                                 })
 
                                 connection.query("UPDATE db_pagos.cuenta_bancaria SET Cantidad = ? WHERE Num_cuenta = ? and Id_cuenta = ?", [acp + Number(cant), ac, aci], function(err, results){
                                     console.log("Transaccion exitosa")
+                                    connection.end();
                                 })
 
                             })
@@ -136,8 +88,10 @@ router.post('/Transaccion', async(req,res) => {
                     }
 
                 }
+                connection.end();
             })
         }
+        connection.end();
     })
     
 })
@@ -148,6 +102,7 @@ router.get("/Saldo", async (req, res) => {
     connection.query("SELECT tarjeta.Nombre_tarjeta, tarjeta.Num_tarjeta, tipo_tarjeta.Tipo, if(tipo_tarjeta.Debito_credito=0, 'Debito', 'Credito') as Debito_credito, cuenta_bancaria.Cantidad FROM db_pagos.cuenta_bancaria LEFT JOIN tarjeta ON cuenta_bancaria.Id_tarjeta = tarjeta.Id_tarjeta LEFT JOIN tipo_tarjeta ON tipo_tarjeta.Id_tipo_tarjeta = tarjeta.Id_tipo_tarjeta where Num_cuenta = ?", [Number(usr.Num_cuenta)], function(err, results){
         res.status(302)
         res.send(JSON.stringify(results, null, 4))
+        connection.end();
     })
 })
 

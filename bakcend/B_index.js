@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
-var connection = require("./Db/database")
 const session = require('express-session')
 
 
