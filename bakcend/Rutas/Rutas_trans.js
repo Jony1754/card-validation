@@ -33,28 +33,28 @@ var connection = require("../Db/database.js")
 router.post('/Transaccion', async(req,res) => {
     const usr = req.session.all
     
-    const ac = req.query.ac
-    const cant = req.query.cant
+    const ac = req.body.ac
+    const cant = req.body.cant
     
-    const conp = req.query.conp
+    const conp = req.body.conp
 
-    const tarj = req.query.tarj
-    const csv = req.query.csv
+    const tarj = req.body.tarj
+    const csv = req.body.csv
 
-    const fv = req.query.fv 
-    const cuot =  req.query.cuot
-    console.log("hola")
+    const fv = req.body.fv 
+    const cuot =  req.body.cuot
+
     connection.query("WITH ab as (SELECT tarjeta.Nombre_tarjeta, tarjeta.Num_tarjeta, tipo_tarjeta.Tipo, if(tipo_tarjeta.Debito_credito=0, 'Debito', 'Credito') as Debito_credito, cuenta_bancaria.Cantidad FROM db_pagos.cuenta_bancaria LEFT JOIN tarjeta ON cuenta_bancaria.Id_tarjeta = tarjeta.Id_tarjeta LEFT JOIN tipo_tarjeta ON tipo_tarjeta.Id_tipo_tarjeta = tarjeta.Id_tipo_tarjeta where Num_cuenta = ?) select * from ab where Num_tarjeta = ?", [Number(usr.Num_cuenta),tarj], function(err, results){
         const a = results 
         if(results.length == 0) {
             console.log("la tarjeta no se encuentra")
-            res.status(203)
+            res.send(JSON.stringify("la tarjeta no se encuentra", null, 4))
             throw err
         }else{
             connection.query("SELECT * FROM db_pagos.cuenta_bancaria where Num_cuenta = ?;", [ac], function(err, results){
                 if(results.length == 0) {
                     console.log("la cuenta a depositar no existe")
-                    res.status(203)
+                    res.send(JSON.stringify("la cuenta a depositar no existe", null, 4))
                     throw err
                 }else{
                     const acp = results[0].Cantidad
@@ -74,11 +74,13 @@ router.post('/Transaccion', async(req,res) => {
 
                                 connection.query("UPDATE db_pagos.cuenta_bancaria SET Cantidad = ? WHERE Num_cuenta = ? and Id_cuenta = ?", [acp + Number(cant), ac, aci], function(err, results){
                                     console.log("Transaccion exitosa")
+                                    res.send(JSON.stringify("Transaccion exitosa", null, 4))
                                 })
 
                             })
                         }else{
                             console.log("salgo insuficiente")
+                            res.send(JSON.stringify("salgo insuficiente", null, 4))
                         }
                     }else{            
                         if (a[0].Cantidad >= cant/cuot && cuot > 0){
@@ -94,11 +96,13 @@ router.post('/Transaccion', async(req,res) => {
 
                                 connection.query("UPDATE db_pagos.cuenta_bancaria SET Cantidad = ? WHERE Num_cuenta = ? and Id_cuenta = ?", [acp + Number(cant/cuot), ac, aci], function(err, results){
                                     console.log("Transaccion exitosa")
+                                    res.send(JSON.stringify("Transaccion exitosa", null, 4))
                                 })
 
                             })
                         }else{
                             console.log("salgo insuficiente")
+                            res.send(JSON.stringify("salgo insuficiente", null, 4))
                         }
                     }
 
@@ -113,7 +117,7 @@ router.post('/Transaccion', async(req,res) => {
 router.get("/Saldo", async (req, res) => {
     const usr = req.session.all
     connection.query("SELECT tarjeta.Nombre_tarjeta, tarjeta.Num_tarjeta, tipo_tarjeta.Tipo, if(tipo_tarjeta.Debito_credito=0, 'Debito', 'Credito') as Debito_credito, cuenta_bancaria.Cantidad FROM db_pagos.cuenta_bancaria LEFT JOIN tarjeta ON cuenta_bancaria.Id_tarjeta = tarjeta.Id_tarjeta LEFT JOIN tipo_tarjeta ON tipo_tarjeta.Id_tipo_tarjeta = tarjeta.Id_tipo_tarjeta where Num_cuenta = ?", [Number(usr.Num_cuenta)], function(err, results){
-        res.status(302)
+        res.status(202)
         res.send(JSON.stringify(results, null, 4))
     })
 })

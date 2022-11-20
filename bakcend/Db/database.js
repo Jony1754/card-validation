@@ -4,8 +4,6 @@ const {sql, sql2} = require("./Querydb")
 
 // Mysql connection 
 
-
-
 const connection = mysql.createConnection({
     host     : host,
     user     : user,

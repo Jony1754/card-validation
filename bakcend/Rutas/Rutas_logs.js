@@ -3,7 +3,6 @@ const router = express.Router();
 var connection = require('../Db/database.js');
 
 router.post('/Login', async (req, res) => {
-  console.log(req.body);
   const usr = req.body.user;
   const pasw = req.body.pasw;
   console.log(usr, pasw, 'login');
