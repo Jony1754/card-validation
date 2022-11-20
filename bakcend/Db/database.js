@@ -4,14 +4,16 @@ const {sql, sql2} = require("./Querydb")
 
 // Mysql connection 
 
-var connection = mysql.createConnection({
+
+
+const connection = mysql.createConnection({
     host     : host,
     user     : user,
     password : pasw,
     database : db,
     multipleStatements: true,
-    connectTimeout: 20000
-})
+    connectTimeout: 30000
+});
 
 connection.connect(error => {
     if (error) {

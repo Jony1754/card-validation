@@ -43,9 +43,9 @@ router.post('/Transaccion', async(req,res) => {
 
     const fv = req.query.fv 
     const cuot =  req.query.cuot
-
+    console.log("hola")
     connection.query("WITH ab as (SELECT tarjeta.Nombre_tarjeta, tarjeta.Num_tarjeta, tipo_tarjeta.Tipo, if(tipo_tarjeta.Debito_credito=0, 'Debito', 'Credito') as Debito_credito, cuenta_bancaria.Cantidad FROM db_pagos.cuenta_bancaria LEFT JOIN tarjeta ON cuenta_bancaria.Id_tarjeta = tarjeta.Id_tarjeta LEFT JOIN tipo_tarjeta ON tipo_tarjeta.Id_tipo_tarjeta = tarjeta.Id_tipo_tarjeta where Num_cuenta = ?) select * from ab where Num_tarjeta = ?", [Number(usr.Num_cuenta),tarj], function(err, results){
-        console.log(results)
+        const a = results 
         if(results.length == 0) {
             console.log("la tarjeta no se encuentra")
             res.status(203)
@@ -60,17 +60,15 @@ router.post('/Transaccion', async(req,res) => {
                     const acp = results[0].Cantidad
                     const aci = results[0].Id_cuenta
 
-                    if (results[0].Debito_credito == "Debito"){
-                        if (results[0].Cantidad >= cant){
-                            const result = results[0].Cantidad - cant
-                            
-                            connection.query("SELECT Id_tarjeta FROM db_pagos.tarjeta where Num_tarjeta = ?;", [results[0].Num_tarjeta], function(err, results) {
-                                
+                    if (a[0].Debito_credito == "Debito"){
+                        if (a[0].Cantidad >= cant){
+                            const result = a[0].Cantidad - Number(cant)
+                            connection.query("SELECT Id_tarjeta FROM db_pagos.tarjeta where Num_tarjeta = ?;", [a[0].Num_tarjeta], function(err, results) {
                                 connection.query("UPDATE db_pagos.cuenta_bancaria SET Cantidad = ? WHERE Id_tarjeta = ? and Id_cuenta > 0",[result, results[0].Id_tarjeta], function(err,results){
                                     console.log("update cuenta")
                                 })
                                 
-                                connection.query("INSERT INTO db_pagos.transacciones (Id_cuenta_entrega, Id_cuenta_recibido, Cantidad, Conpago) values (?,?,?,?)", [usr.Num_cuenta,ac,cant,conp], function(err,results){
+                                connection.query("INSERT INTO db_pagos.transacciones (Id_cuenta_entrega, Id_cuenta_recibido, Cantidad, Conpago) values (?,?,?,?)", [usr.Num_cuenta,ac,Number(cant),conp], function(err,results){
                                     console.log("add transaccion")
                                 })
 
@@ -79,9 +77,29 @@ router.post('/Transaccion', async(req,res) => {
                                 })
 
                             })
+                        }else{
+                            console.log("salgo insuficiente")
                         }
                     }else{            
-                    
+                        if (a[0].Cantidad >= cant/cuot && cuot > 0){
+                            const result = a[0].Cantidad - Number(cant/cuot)
+                            connection.query("SELECT Id_tarjeta FROM db_pagos.tarjeta where Num_tarjeta = ?;", [a[0].Num_tarjeta], function(err, results) {
+                                connection.query("UPDATE db_pagos.cuenta_bancaria SET Cantidad = ? WHERE Id_tarjeta = ? and Id_cuenta > 0",[result, results[0].Id_tarjeta], function(err,results){
+                                    console.log("update cuenta")
+                                })
+                                
+                                connection.query("INSERT INTO db_pagos.transacciones (Id_cuenta_entrega, Id_cuenta_recibido, Cantidad, Conpago) values (?,?,?,?)", [usr.Num_cuenta,ac,Number(cant/cuot),conp], function(err,results){
+                                    console.log("add transaccion")
+                                })
+
+                                connection.query("UPDATE db_pagos.cuenta_bancaria SET Cantidad = ? WHERE Num_cuenta = ? and Id_cuenta = ?", [acp + Number(cant/cuot), ac, aci], function(err, results){
+                                    console.log("Transaccion exitosa")
+                                })
+
+                            })
+                        }else{
+                            console.log("salgo insuficiente")
+                        }
                     }
 
                 }
