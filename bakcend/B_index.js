@@ -22,7 +22,7 @@ const routetrans = require('./Rutas/Rutas_trans');
 app.use('/Login', routeLog);
 app.use('/Transacciones', routetrans);
 
-// open app port 3000
+// open app port 3005
 app.listen(3005, (err) => {
   if (err) {
     console.log('Error', err);
