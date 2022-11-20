@@ -68,17 +68,14 @@ router.post('/Transaccion', async(req,res) => {
                                 
                                 connection.query("UPDATE db_pagos.cuenta_bancaria SET Cantidad = ? WHERE Id_tarjeta = ? and Id_cuenta > 0",[result, results[0].Id_tarjeta], function(err,results){
                                     console.log("update cuenta")
-                                    connection.end();
                                 })
                                 
                                 connection.query("INSERT INTO db_pagos.transacciones (Id_cuenta_entrega, Id_cuenta_recibido, Cantidad, Conpago) values (?,?,?,?)", [usr.Num_cuenta,ac,cant,conp], function(err,results){
                                     console.log("add transaccion")
-                                    connection.end();
                                 })
 
                                 connection.query("UPDATE db_pagos.cuenta_bancaria SET Cantidad = ? WHERE Num_cuenta = ? and Id_cuenta = ?", [acp + Number(cant), ac, aci], function(err, results){
                                     console.log("Transaccion exitosa")
-                                    connection.end();
                                 })
 
                             })
@@ -88,10 +85,8 @@ router.post('/Transaccion', async(req,res) => {
                     }
 
                 }
-                connection.end();
             })
         }
-        connection.end();
     })
     
 })
@@ -102,7 +97,6 @@ router.get("/Saldo", async (req, res) => {
     connection.query("SELECT tarjeta.Nombre_tarjeta, tarjeta.Num_tarjeta, tipo_tarjeta.Tipo, if(tipo_tarjeta.Debito_credito=0, 'Debito', 'Credito') as Debito_credito, cuenta_bancaria.Cantidad FROM db_pagos.cuenta_bancaria LEFT JOIN tarjeta ON cuenta_bancaria.Id_tarjeta = tarjeta.Id_tarjeta LEFT JOIN tipo_tarjeta ON tipo_tarjeta.Id_tipo_tarjeta = tarjeta.Id_tipo_tarjeta where Num_cuenta = ?", [Number(usr.Num_cuenta)], function(err, results){
         res.status(302)
         res.send(JSON.stringify(results, null, 4))
-        connection.end();
     })
 })
 

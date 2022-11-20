@@ -9,12 +9,13 @@ var connection = mysql.createConnection({
     user     : user,
     password : pasw,
     database : db,
-    multipleStatements: true
+    multipleStatements: true,
+    connectTimeout: 20000
 })
 
 connection.connect(error => {
     if (error) {
-        throw error;
+        throw error
     }else{
         connection.query(sql, function(error) {
             if (error) {
@@ -26,10 +27,8 @@ connection.connect(error => {
                     }else{
                         if(results.length==0){connection.query(sql2)}
                     }
-                    connection.end();
                 });
             }
-            connection.end();
         });
     }
     console.log("********** conectado a la base de datos ************")

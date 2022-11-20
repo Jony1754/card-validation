@@ -20,7 +20,6 @@ router.post('/Login', async (req, res) => {
             res.status(302)
             res.send(JSON.stringify(results, null, 4))
             }
-            connection.end();
         })
     } catch (error) {
         res.status(404)
