@@ -19,8 +19,11 @@ app.use(
 // ROUTES
 const routeLog = require('./Rutas/Rutas_logs');
 const routetrans = require('./Rutas/Rutas_trans');
+const routeinfo = require('./Rutas/Rutas_info')
 app.use('/Login', routeLog);
 app.use('/Transacciones', routetrans);
+app.use('/Info', routeinfo)
+
 
 // open app port 3005
 app.listen(3005, (err) => {
