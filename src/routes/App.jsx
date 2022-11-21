@@ -2,8 +2,11 @@ import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
 import { Login } from '../pages/Login';
 import { useState, useEffect } from 'react';
+
 function App() {
   const [isLogged, setIsLogged] = useState(true);
+  const [validUser, setValidUser] = useState('');
+
   useEffect(() => {
     if (isLogged) {
       document.body.classList.remove('body');

@@ -2,7 +2,8 @@ import React from 'react';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import { Login } from '../pages/Login';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext, createContext } from 'react';
+
 const Layout = ({ children }) => {
   const [isLogged, setIsLogged] = useState(false);
   useEffect(() => {
@@ -14,7 +15,7 @@ const Layout = ({ children }) => {
   if (!isLogged) {
     return (
       <>
-        <Login setIsLogged={setIsLogged} />
+        <Login setIsLogged={setIsLogged} setValidUser />
       </>
     );
   } else {

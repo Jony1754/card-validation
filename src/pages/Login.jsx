@@ -5,13 +5,14 @@ import calvito from '../assets/calvito.jpg';
 import noman from '../assets/noman.png';
 import axios from 'axios';
 import '../scss/login.scss';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 export const Login = ({ setIsLogged }) => {
   const [validUser, setValidUser] = React.useState('');
   const [passcode, setPasscode] = React.useState('');
   const [error, setError] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [name, setName] = React.useState('Jonathan Arias');
-
+  const [loginData, setLoginData] = React.useState();
   React.useEffect(() => {
     setLoading(false);
   }, []);
@@ -25,12 +26,13 @@ export const Login = ({ setIsLogged }) => {
     console.log('validUser', validUser, 'pass', passcode);
 
     axios
-      .post('http://localhost:3007/Login/Login', {
+      .post('http://localhost:3005/Login/Login', {
         user: validUser,
         pasw: passcode,
       })
       .then((res) => {
-        console.log('res', res);
+        console.log('res', res.data);
+        setLoginData(res.data);
         setIsLogged(true);
         if (res.data.status === 'success') {
           setIsLogged(true);
@@ -98,6 +100,8 @@ const LoginWithoutUser = ({
       setLoading(false);
     };
   }, []);
+
+  const [numCuenta, setNumCuenta] = useLocalStorage('Num_cuenta', '1010');
   const [user, setUser] = React.useState('');
   const handleChange = (e) => {
     setUser(e.target.value);
@@ -107,12 +111,15 @@ const LoginWithoutUser = ({
     setLoading(true);
     setLoading(true);
     axios
-      .post('http://localhost:3007/Info/InfoP', { user: user })
+      .post('http://localhost:3005/Info/InfoP', { user: user })
       .then((res) => {
-        console.log('res', res);
+        console.log('res.data[0] en login', res.data[0]);
         setName(res.data[0].Nombre);
+
         setLoading(false);
         setValidUser(user);
+        console.log('NUM CUENTA,', res.data[0].Num_cuenta);
+        setNumCuenta(res.data[0].Num_cuenta);
       });
   };
   return (
