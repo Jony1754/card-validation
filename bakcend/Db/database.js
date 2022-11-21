@@ -11,6 +11,7 @@ const connection = mysql.createConnection({
     database : db,
     multipleStatements: true,
     connectTimeout: 30000
+    
 });
 
 connection.connect(error => {
