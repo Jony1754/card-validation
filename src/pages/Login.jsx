@@ -3,13 +3,18 @@ import { Link } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 import calvito from '../assets/calvito.jpg';
 import noman from '../assets/noman.png';
+import axios from 'axios';
 import '../scss/login.scss';
 export const Login = ({ setIsLogged }) => {
   const [validUser, setValidUser] = React.useState('');
   const [passcode, setPasscode] = React.useState('');
   const [error, setError] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [name, setName] = React.useState('Jonathan Arias');
 
+  React.useEffect(() => {
+    setLoading(false);
+  }, []);
   const handleChange = (e) => {
     setPasscode(e.target.value);
   };
@@ -19,26 +24,41 @@ export const Login = ({ setIsLogged }) => {
     setLoading(true);
     console.log('validUser', validUser, 'pass', passcode);
 
-    setTimeout(() => {
-      if (validUser === 'ariasej' && passcode === '1234') {
-        console.log('validUser', validUser, 'pass', passcode);
-        setError(false);
+    axios
+      .post('http://localhost:3007/Login/Login', {
+        user: validUser,
+        pasw: passcode,
+      })
+      .then((res) => {
+        console.log('res', res);
         setIsLogged(true);
+        if (res.data.status === 'success') {
+          setIsLogged(true);
+        } else {
+          setError(true);
+        }
         setLoading(false);
-      } else {
-        setError(true);
-        setLoading(false);
-      }
-    }, 4000);
+      });
+
+    // setTimeout(() => {
+    //   if (validUser === 'ariasej' && passcode === '1234') {
+    //     console.log('validUser', validUser, 'pass', passcode);
+    //     setError(false);
+    //     setIsLogged(true);
+    //     setLoading(false);
+    //   } else {
+    //     setError(true);
+    //     setLoading(false);
+    //   }
+    // }, 4000);
   };
 
   return validUser.length > 0 ? (
     <div className='login__container transition'>
       <div className='login'>
         <img src={calvito} alt='avatar' />
-
         <h3>Welcome back</h3>
-        <h2>Jonathan Arias</h2>
+        <h2>{name ? name[0].toUpperCase() + name.substring(1) : ''}</h2>
         <form action='' className='login-form' onSubmit={handleSubmit}>
           <input
             type='password'
@@ -61,26 +81,39 @@ export const Login = ({ setIsLogged }) => {
       loading={loading}
       setError={setError}
       setValidUser={setValidUser}
+      setName={setName}
     />
   );
 };
 
-const LoginWithoutUser = ({ setLoading, setError, setValidUser, loading }) => {
+const LoginWithoutUser = ({
+  setLoading,
+  setError,
+  setValidUser,
+  loading,
+  setName,
+}) => {
+  React.useEffect(() => {
+    return () => {
+      setLoading(false);
+    };
+  }, []);
   const [user, setUser] = React.useState('');
   const handleChange = (e) => {
     setUser(e.target.value);
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (user === 'ariasej') {
-      setLoading(true);
-      setTimeout(() => {
+    setLoading(true);
+    setLoading(true);
+    axios
+      .post('http://localhost:3007/Info/InfoP', { user: user })
+      .then((res) => {
+        console.log('res', res);
+        setName(res.data[0].Nombre);
         setLoading(false);
         setValidUser(user);
-      }, 3000);
-    } else {
-      setError(true);
-    }
+      });
   };
   return (
     <div className='login transition'>
