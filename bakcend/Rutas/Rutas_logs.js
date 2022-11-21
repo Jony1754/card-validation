@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 var connection = require('../Db/database.js');
 
-
 router.post('/Login', async (req, res) => {
-  const usr = req.query.user;
-  const pasw = req.query.pasw;
+  console.log(req.body, 'BODY EN LOGIN');
+  const usr = req.body.user;
+  const pasw = req.body.pasw;
   console.log(usr, pasw, 'login');
   const sql = 'SELECT * FROM db_pagos.usuarios WHERE Usuario = ?';
   try {
@@ -18,6 +18,7 @@ router.post('/Login', async (req, res) => {
         req.session.loggedin = true;
         req.session.usr = results[0].Usuario;
         req.session.all = results[0];
+        req.session.save();
         res.status(200);
         res.send(JSON.stringify(results, null, 4));
       }
